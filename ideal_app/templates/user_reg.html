@@ -1,0 +1,35 @@
+{% extends 'admin_home.html' %}
+
+{% block content %}
+<style>
+    .inputs{
+        border: none;
+        border-bottom: 1px solid black;
+        width: 100%;
+        margin-top: 30px;
+        background: none;
+    }
+</style>
+   <form action="" method="">
+        <div>
+            <input type="text" name="name" placeholder="Name" class="inputs">
+        </div>
+        <div>
+            <input type="text" name="email" placeholder="Email" class="inputs">
+        </div>
+        <div>
+            <input type="text" name="password" placeholder="Password" class="inputs">
+        </div>
+        <div>
+            <input type="text" placeholder="Confirm Password" class="inputs">
+        </div>
+        <div>
+            <label>Male</label>
+            <input type="radio" name="gender" value="male"> 
+        </div>
+        <div>
+            <label>Female</label>
+            <input type="radio" name="gender" value="female">
+        </div>
+   </form>
+{% endblock %}
