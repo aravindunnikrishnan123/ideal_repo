@@ -1,47 +1,9 @@
 {% load static %}
 <html>
     <head>
-        <style>
-            body{
-                background: url("{% static 'background.jpeg' %}");
-                background-repeat: no-repeat;
-                background-size:800px;
-                background-position: right;        
-            }
-            .column {
-                width: 15%;
-                padding: 25px;
-                text-align: center;
-                font-size: 25px;
-                cursor: pointer;
-                color: white;
-                background-color: rgb(3, 3, 126);
-                margin: 40px 20px;
-            }
-           
-            .row {
-                display: flex;
-            }
-            .atag{
-                text-decoration: none;
-                color: white;
-            }
-            .content{
-                background-color: rgb(241, 248, 212);
-                width: 50%;
-                margin: auto;
-
-            }
-        </style>
-        <script>
-            function displayForm(e){
-                if (e.target.id == 'atag1'){
-                    document.getElementsByClassName('content')[0].style.display = 'block';
-                }
-                
-                
-            }
-        </script>
+        <link href="{% static 'style/admin_home.css' %}" type="text/css" rel="stylesheet">
+        <link href="{% static 'style/user_reg.css' %}" type="text/css" rel="stylesheet">
+        <script src="{% static 'script/admin.js' %}"></script>
     </head>
     <body>
 

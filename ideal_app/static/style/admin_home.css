@@ -1,0 +1,30 @@
+body{
+    background: url("/static/images/background.jpeg");
+    background-repeat: no-repeat;
+    background-size:700px;
+    background-position: right;        
+}
+.column {
+    width: 15%;
+    padding: 25px;
+    text-align: center;
+    font-size: 25px;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(3, 3, 126);
+    margin: 40px 20px;
+}
+
+.row {
+    display: flex;
+}
+.atag{
+    text-decoration: none;
+    color: white;
+}
+.content{
+    background-color: rgb(241, 248, 212);
+    width: 50%;
+    margin: auto;
+
+}
