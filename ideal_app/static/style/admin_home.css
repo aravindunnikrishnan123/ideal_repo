@@ -28,3 +28,17 @@ body{
     margin: auto;
 
 }
+
+#msg{
+    margin-left: 70%;
+    background-color: green;
+    color: white;
+    height: 30px;
+    font-size: 18px;
+    position: absolute;
+    margin-top: 20px;
+    padding: 15px 15px;
+    width: 250px;
+
+    
+}

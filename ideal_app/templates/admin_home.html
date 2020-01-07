@@ -3,19 +3,19 @@
     <head>
         <link href="{% static 'style/admin_home.css' %}" type="text/css" rel="stylesheet">
         <link href="{% static 'style/user_reg.css' %}" type="text/css" rel="stylesheet">
-        <script src="{% static 'script/admin.js' %}"></script>
+        <script  src="{% static 'script/admin.js' %}"></script>
     </head>
-    <body>
-
+    <body onload="showMessage()">
+            <p id="msg" hidden>{{message}}</p>
         <div class="row">
             <div class="column">
-                <a href="/saveuser" class="atag" onclick="return displayForm(event)" id="atag1">Register Student</a>
+                <a href="/saveuser" class="atag" onclick="displayForm()">Register Student</a>
             </div>
             <div class="column">
-                Create Exam
+                     <a href="/create-exam" class="atag" onclick="displayForm()">Create Exam</a>
             </div>
             <div class="column">
-                View Reports
+                <a href="#" class="atag">View Reports</a>
             </div>
         </div>
 
@@ -25,6 +25,5 @@
                 {% endblock %}
              </div>
         </div>
-
     </body>
 </html>

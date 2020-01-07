@@ -1,0 +1,16 @@
+{% extends 'admin_home.html' %}
+
+{% block content %}
+    <div>
+        <form action="/add-questions/" method = 'POST'>
+          {% csrf_token %}
+          <input type="text" class="inputs" placeholder="Question" name="question">
+          <input type="text" class="inputs" placeholder="Option A" name="opt1">
+          <input type="text" class="inputs" placeholder="Option B" name="opt2">
+          <input type="text" class="inputs" placeholder="Option C" name="opt3">
+          <input type="text" class="inputs" placeholder="Option D" name="opt4">
+          <input type="text" class="inputs" placeholder="Answer"   name="ans">
+          <input type="submit" value="Add Questions">
+        </form>
+    </div>
+{% endblock %}
