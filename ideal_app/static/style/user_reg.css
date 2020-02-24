@@ -14,10 +14,19 @@ h2{
     font-size: 18px;
 }
 .radio-div{
-    display: inline-block;
-    margin:30px 10px;
+    display: inline-flex;
+    margin:15px 10px;
     font-size: 18px;
+    width: 95%;
+    text-align: left;
 }
+.radio-div label{
+    width: 64px;
+    margin-left: 6px;
+    
+}
+
+
 #btn
 {
     margin: 12px 38%;

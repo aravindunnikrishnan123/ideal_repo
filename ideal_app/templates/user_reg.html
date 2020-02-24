@@ -1,11 +1,20 @@
-{% extends 'admin_home.html' %}
-
+{% extends 'home.html' %}
 {% block content %}
 
     <div>
         <h2>User Details</h2>
     </div>
-   <form action="" method="">
+   <form action="/saveuser/" method="POST">
+        {% csrf_token %}
+        {% if user == 'teacher' %}
+            <div>
+                <input type="text" name="user_id" placeholder="Teacher ID" class="inputs">
+            </div>
+        {% else %}
+            <div>
+                <input type="text" name="user_id" placeholder="Student ID" class="inputs">
+            </div>
+        {% endif %}
         <div>
             <input type="text" name="name" placeholder="Name" class="inputs">
         </div>
@@ -13,19 +22,19 @@
             <input type="text" name="email" placeholder="Email" class="inputs">
         </div>
         <div>
-            <input type="text" name="password" placeholder="Password" class="inputs">
+            <input type="password" name="password" placeholder="Password" class="inputs">
         </div>
         <div>
-            <input type="text" placeholder="Confirm Password" class="inputs">
+            <input type="password" placeholder="Confirm Password" class="inputs">
         </div>
         <div class="radio-div">
-            <label>Male</label>
+            <label class="label1">Male</label>
             <input type="radio" name="gender" value="male"> 
-        </div>
-        <div class="radio-div">
-            <label>Female</label>
+    
+            <label class="label1">Female</label>
             <input type="radio" name="gender" value="female">
         </div>
+        <input type="hidden" name="user" value="{{user}}">
         <div>
             <input type="submit" value="Register" id="btn">
         </div>

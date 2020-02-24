@@ -1,0 +1,33 @@
+{% load static %}
+<html>
+    <head>
+     <link href="{% static 'style/exam_menu.css' %}" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                <th>Exam Title</th>
+                <th>Description</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for exam in exam_list %}
+                <tr>
+                <td>
+                    <a href="/select-exam?exam-id={{exam.id}}" >{{exam.title}}</a>
+                </td>
+                <td>
+                   <p >{{exam.description}}</p>
+                </td>
+                </tr>
+                
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        
+    </div>
+    </body>
+</html>

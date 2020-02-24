@@ -1,10 +1,10 @@
-{% extends 'admin_home.html' %}
-
+{% extends 'home.html' %}
 {% block content %}
     <div>
        <form action="/create-exam/" method="POST">
         {% csrf_token %}
         <input type="text" class="inputs" placeholder="Title" name="title">
+        <input type="text" class="inputs" placeholder="Description" name="description">
         <input type="text" class="inputs" placeholder="No Of Questions" name="total_ques">
         <input type="text" class="inputs" placeholder="ToTal Marks" name="marks">
         <input type="text" class="inputs" placeholder="Duration in Minutes" name="duration">

@@ -1,0 +1,43 @@
+{% load static %}
+<html>
+    <head>
+        <link href="{% static 'style/home.css' %}" type="text/css" rel="stylesheet">
+        <link href="{% static 'style/user_reg.css' %}" type="text/css" rel="stylesheet">
+        <script  src="{% static 'script/home.js' %}"></script>
+    </head>
+    <body onload="showMessage()">
+        <p id="msg" hidden>{{message}}</p>
+        <div class="row">
+            {% if 'admin' in request.session.user or 'teacher' in request.session.user %}
+                <div class="column">
+                    <a href="/saveuser?type=student" class="atag" onclick="displayForm()">Create Student Account</a>
+                </div>
+                <div class="column">
+                        <a href="/create-exam" class="atag" onclick="displayForm()">Create Exam</a>
+                </div>
+                <div class="column">
+                    <a href="#" class="atag">View Reports</a>
+                </div>
+                {% if 'admin' in request.session.user %}
+                    <div class="column">
+                        <a href="/saveuser?type=teacher" class="atag">Create Teacher Account</a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="column">
+                    <a href="/viewexams" class="atag">Exam</a>
+                </div>
+            {% endif %}
+            <div class="column">
+                    <a href="/logout" class="atag">Log Out</a>
+                </div>
+        </div>
+
+        <div class="row">
+             <div class="content">
+                {% block content %}
+                {% endblock %}
+             </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+table{
+    width: 70%;
+    
+    text-align: center;
+    margin: 10% auto;
+    
+}
+
+tr,th,td{
+    border: 1px solid snow;
+    padding:14px;
+    font-family: sans-serif;
+    background-color:00a498;
+    color: ffffff;
+}
+th{
+    background-color:17508b;
+    color:a7e0ed;
+}
+body{
+    background-color:d8e3e3;
+}
