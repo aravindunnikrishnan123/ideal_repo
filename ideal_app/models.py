@@ -33,7 +33,7 @@ class StudentExamResult(models.Model):
     question    = models.ForeignKey(Questions,on_delete=models.CASCADE)
     mark        = models.IntegerField()
     user_ans    = models.CharField(max_length=20)
-    time_taken  = models.CharField(max_length=15,default=None)
+    time_taken  = models.IntegerField()
 
 class StudentExamStatus(models.Model):
     student   = models.ForeignKey(UserDetails,on_delete=models.CASCADE)

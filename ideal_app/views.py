@@ -104,10 +104,10 @@ def fn_viewExams(request):
     
     if student_exist:
         # the student_exam_status queryset returns exam id which students have finished.
-        student_exam_status = StudentExamStatus.objects.filter(student=student_id)
+        student_exam_status = StudentExamStatus.objects.filter(student=student_id).only('exam')
         if student_exam_status:    
         # The queryset return exams which were not finished by the student.
-            exam_obj = Exam.objects.filter().exclude(id__in=student_exam_status.exam).only('id','title','description')
+            exam_obj = Exam.objects.filter().exclude(id__in=student_exam_status).only('id','title','description')
         else:
             exam_obj = Exam.objects.all()
         for e in exam_obj:
@@ -130,15 +130,18 @@ def fn_getQuestions(request):
     exam_obj = Exam.objects.get(id=exam_id)
     student  = UserDetails.objects.get(id=request.session['user_id'])    
     if request.method == 'GET':
-        status = request.GET['status']
-        stud_exam_status = StudentExamStatus(student=student,exam=exam_obj,status=status)
-        stud_exam_status.save()
-        if status == 'Finished':
-            del request.session['exam_id']
-            return HttpResponse('finished')
+        if 'status' in request.GET:
+            status = request.GET['status']
+            if status == 'Finished':
+                StudentExamStatus.objects.filter(student=student,exam=exam_obj).update(status=status)
+                del request.session['exam_id']
+                return redirect('/login')
+            else:
+                stud_exam_status = StudentExamStatus(student=student,exam=exam_obj,status=status)
+                stud_exam_status.save()
         try:
             question_obj = Questions.objects.filter(exam=exam_id).first() 
-            request.session['question_time'] = exam_obj.duration / exam_obj.total_questions # time taken to complete one question
+            request.session['question_time'] = exam_obj.duration // exam_obj.total_questions # time taken to complete one question
         except Exception as e:
             print(e)
             return redirect('/login')
@@ -153,7 +156,8 @@ def fn_getQuestions(request):
 
 #service to evaluate student answer.
 def evaluateStudentExam(req_dict,exam_obj,student,time_per_question):
-    time_taken = req_dict['current-time']
+    print(req_dict)
+    time_taken = int(req_dict['current-time'])
     user_ans   = 'not explained'
     mark = 0
     question = Questions.objects.get(id=req_dict['question-id'])
@@ -165,16 +169,17 @@ def evaluateStudentExam(req_dict,exam_obj,student,time_per_question):
     question_submitted_obj = StudentExamResult.objects.filter(Q(question=req_dict['question-id']) 
                             &Q(student=student))
     if question_submitted_obj:
-        if question_submitted_obj[0].time_taken == time_per_question:
+        if question_submitted_obj[0].time_taken == int(time_per_question) * 60:# convert into seconds
             #question_obj = Questions.objects.filter(exam=exam_obj,id__gt=req_dict['question-id']).first()
             # this question is already timeout for this student.
             return 0
         else:
-            if question_submitted_obj[0].time_taken + time_taken <= time_per_question:
+            print(time_per_question)
+            if question_submitted_obj[0].time_taken + time_taken <= int(time_per_question)*60:
                 question_submitted_obj[0].mark = mark
                 question_submitted_obj[0].user_ans = user_ans
                 question_submitted_obj[0].time_taken += time_taken
-                question_submitted_obj[o].save()
+                question_submitted_obj[0].save()
     else:
         result_obj = StudentExamResult(student=student,question=question,
                             mark=mark,user_ans=user_ans,time_taken=time_taken)
