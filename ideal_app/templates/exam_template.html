@@ -19,7 +19,7 @@
                     00</span></label>
             </div>
         {% if not question %}
-            <form action="/getquestions" method="GET">
+            <form action="/set-status" method="GET">
                 {% csrf_token %}
                 {% if response %}
                 <div>

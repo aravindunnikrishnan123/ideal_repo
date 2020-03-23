@@ -1,0 +1,90 @@
+.head{
+    
+    display: inline-flex;
+    height: 120px;
+    width: 100%;
+    padding-left: 10px;
+    background-color:#eff9f4;
+}
+h1{
+    margin: 50px 100px;
+    font-family: sans-serif;
+    font-weight: normal;
+    color: rgb(70, 70, 51);
+}
+.form-div{
+    margin: 40px 175px;
+    
+}
+#inputbox{
+    border:none;
+    border-bottom: 1px solid black;
+    margin-left: 10px;
+    outline: none;
+    font-size: 20px;
+    color: rgb(121, 121, 121);
+    
+}
+
+#selection-box{
+    border: none;
+    width: 20%;
+    padding: 10px;
+    background-color: rgb(40, 168, 125);
+    margin-left: 30px;
+    font-size: 14px;    
+    color: snow;
+    padding: 12px;
+}
+
+.drop-down{
+    background-color: lightsalmon;
+    width: 197px;
+    margin-left: 549px;
+}
+.options{
+    background-color: rgb(238, 197, 181);
+    padding: 15px 16px;
+    border: 1px solid red;
+}
+#button{
+    width: 20%;
+    padding: 5px;
+    background-color: rgb(75, 156, 115);
+    color: white;
+    margin-left: 20px;
+    cursor: not-allowed;
+    font-size: 16px;
+}
+
+table{
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    border-spacing: 10px;
+}
+#heading{
+    background-color: #77a58e;
+    height: 50px;
+    font-family: sans-serif;
+    font-size: 20px;
+    color: white;
+}
+#head-row{
+    background-color: #96c5a9;
+    color: white;
+    font-weight: normal;
+}
+.row:nth-child(even){
+    background-color: rgb(206, 223, 217);
+    
+}
+.row:nth-child(odd){
+    background-color: rgb(222, 235, 231);
+}
+.row{
+    height: 30px;
+    font-family: sans-serif;
+    color: rgb(65, 61, 61);
+    text-transform: capitalize;
+}

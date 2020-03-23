@@ -99,25 +99,25 @@ def fn_addQuestion(request):
 
 def fn_viewExams(request):
     student_id = request.session['user_id']
-    exam_list = []
+    exam_list  = []
+    exam_obj   = '' 
     student_exist = StudentExamStatus.objects.filter(student=student_id).exists()
     
     if student_exist:
         # the student_exam_status queryset returns exam id which students have finished.
-        student_exam_status = StudentExamStatus.objects.filter(student=student_id).only('exam')
-        if student_exam_status:    
+        attended_exam = []
+        attended_exams_obj = StudentExamStatus.objects.filter(student=student_id)
+        for e in attended_exams_obj:
+            attended_exam.append(e.exam.id)  
         # The queryset return exams which were not finished by the student.
-            exam_obj = Exam.objects.filter().exclude(id__in=student_exam_status).only('id','title','description')
-        else:
-            exam_obj = Exam.objects.all()
-        for e in exam_obj:
-            exam_list.append(e)
-        return render(request,'exam_menu.html',{'exam_list':exam_list})
+            exam_obj = Exam.objects.filter().exclude(id__in=attended_exam).only('id','title','description')
+            if not exam_obj:
+                return render(request,'home.html',{'message':"You have taken all the Exam"})
     else:
-        exams_obj = Exam.objects.only('id','title','description')
-        for e in exams_obj:
-            exam_list.append(e)
-        return render(request,'exam_menu.html',{'exam_list':exam_list})
+        exam_obj = Exam.objects.only('id','title','description')
+    for e in exam_obj:
+        exam_list.append(e)
+    return render(request,'exam_menu.html',{'exam_list':exam_list})
 
 def fn_selectExam(request):
     selected_exam_id = request.GET['exam-id']
@@ -125,28 +125,34 @@ def fn_selectExam(request):
     request.session['exam_id'] = selected_exam_id    
     return render(request,'exam_template.html',{'exam':exam_obj})
 
+def fn_setExamStatus(request):
+    status   = request.GET['status']
+    exam_id  = request.session['exam_id']
+    exam_obj = Exam.objects.get(id=exam_id)
+    student  = UserDetails.objects.get(id=request.session['user_id'])
+    try:
+        stud_exam_status = StudentExamStatus.objects.get(student=student,exam=exam_obj)
+        if stud_exam_status.status == status:
+            return redirect('/getquestions')
+        stud_exam_status.status = status
+        stud_exam_status.save()
+        del request.session['exam_id']
+        return redirect('/login')
+    except:
+        stud_exam_status = StudentExamStatus(student=student,exam=exam_obj,status=status)
+        stud_exam_status.save()
+    return redirect('/getquestions')
+
+
 def fn_getQuestions(request):
     exam_id = request.session['exam_id']
     exam_obj = Exam.objects.get(id=exam_id)
     student  = UserDetails.objects.get(id=request.session['user_id'])    
     if request.method == 'GET':
-        if 'status' in request.GET:
-            status = request.GET['status']
-            if status == 'Finished':
-                StudentExamStatus.objects.filter(student=student,exam=exam_obj).update(status=status)
-                del request.session['exam_id']
-                return redirect('/login')
-            else:
-                stud_exam_status = StudentExamStatus(student=student,exam=exam_obj,status=status)
-                stud_exam_status.save()
-        try:
-            question_obj = Questions.objects.filter(exam=exam_id).first() 
-            request.session['question_time'] = exam_obj.duration // exam_obj.total_questions # time taken to complete one question
-        except Exception as e:
-            print(e)
-            return redirect('/login')
+        question_obj = Questions.objects.filter(exam=exam_id).first() 
+        request.session['question_time'] = exam_obj.duration // exam_obj.total_questions # time taken to complete one question
+       
     else:
-        print(request.POST)
         cur_ques_id = request.POST['question-id']
         evaluateStudentExam(request.POST,exam_obj,student,request.session['question_time'])
         question_obj = Questions.objects.filter(exam=exam_id,id__gt=cur_ques_id).first()
@@ -186,14 +192,37 @@ def evaluateStudentExam(req_dict,exam_obj,student,time_per_question):
         result_obj.save()
     return 1
         
-def examReport(request):
-    exam    = request.GET['exam-id']
-    try:
-        student_reg_no = request.GET['reg-no']
-    except MutltiValueDictKey:
-        student = request.session['user_id']
+def fn_examReport(request):
+    if request.method == 'POST':
+        student_id = request.POST['student-id']
+        exam       = request.POST['exam-id']
+        try:
+            user = UserDetails.objects.get(user_id=student_id)
+            exam_status_obj = StudentExamStatus.objects.get(exam=exam)
+            if exam_status_obj.status == 'Finished':
+                question_list = []
+                questions = Questions.objects.filter(exam=exam)
+                total = 0
+                for qobj in questions:
+                    total += 1
+                    question_list.append(qobj.id)
 
-    return HttpResponse('ok')
+                exam_result_obj = StudentExamResult.objects.filter(student=user,question__in=question_list)
+                exam_result_obj.time = questions[0].exam.duration // total * 60
+                exam_result_obj.title= questions[0].exam.title
+                result_dict = {'result':exam_result_obj}
+        except Exception as e:
+            print(e)
+            return redirect('/exam-report?message=no user')
+
+        return render(request,'report.html',result_dict)
+    print(request.GET)
+    exams = Exam.objects.only('id','title')
+    if 'message' in request.GET:
+        return render(request,'report.html',{'exams':exams,'response':'Invalid User ID'})
+   
+    return render(request,'report.html',{'exams':exams})
+
 def fn_logOut(request):
     del request.session['user']
     return redirect('/')

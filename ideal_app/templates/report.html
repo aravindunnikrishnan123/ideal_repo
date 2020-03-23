@@ -1,0 +1,66 @@
+{% load static %}
+<html>
+    <head>
+        <link href="{% static '/style/report.css' %}" rel="stylesheet" type="text/css">
+        <script src="{% static 'script/report.js' %}"></script>
+    </head>
+    <body>
+        <div class="head">
+            <img src="{% static '/images/ideal_logo.png' %}" width="150px">
+            <h1>IDEAL COLLEGE EXAMINATION RESULT
+        </div>
+        <form method="POST" action="/exam-report/" autocomplete="off">
+            {% csrf_token %}
+           <div class="form-div">
+                <input type="text" name="student-id" id="inputbox" placeholder="Student ID Number" size="40" onkeyup="validate()">
+                <select name="exam-id" id="selection-box" onmouseover="setDropDown(this)" >
+                    <option value="0" hidden > Select Your Exam </option>
+                    <!-- {% for exam in exams %}
+                        <option value="{{exam.id}}">{{exam.title}}</option>
+                    {% endfor %} -->
+                </select>
+                <input type="submit" value="Show Result" disabled id="button">
+                <div class="drop-down" hidden onmouseleave="setDropDown(this)" >
+                    {% for exam in exams %}
+                        <div class="options" onclick="validate(this)"  id="{{exam.id}}">{{exam.title}}</div>
+                    {% endfor %}
+                </div>
+           </div>
+        </form>
+        <div class="table-div">
+            {% if result %}
+                <table>
+                    <thead>
+                        <tr id="heading">
+                            <th colspan="7"> {{result.title}} EXAM RESULT</th>
+                        </tr>
+                        <tr class = "row" id="head-row">
+                            <th>SL.NO</th>
+                            <th>QUESTION</th>
+                            <th>YOUR ANSWER</th>
+                            <th>CORRECT ANSWER</th>
+                            <th>TIME GIVEN(in seconds)</th>
+                            <th>TIME TAKEN(in seconds)</th>
+                            <th>MARK</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rs in result %}
+                            <tr class="row">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{rs.question.question}}</td>
+                                <td>{{rs.user_ans}}</td>
+                                <td>{{rs.question.answer}}</td>
+                                <td>{{result.time}}</td>    
+                                <td>{{rs.time_taken}}</td>
+                                <td>{{rs.mark}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <div>{{response}}</div>
+            {% endif %}
+        </div>
+    </body>
+</html>
